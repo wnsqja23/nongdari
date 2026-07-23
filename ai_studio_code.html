@@ -1,8 +1,8 @@
-<!-- index.html 전체 교체용 (Storage 없이 사진 저장 가능 버전) -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>하나님 나라 여권</title>
 <script type="importmap">
   {
@@ -13,38 +13,67 @@
   }
 </script>
 <style>
-  /* [기존 스타일 그대로 사용] */
-  :root{--navy:#16223F;--navy-deep:#0D1730;--gold:#C9A227;--gold-light:#E8CD7A;--cream:#F6F1E4;--card:#FFFDF6;--ink:#22314B;--ink-soft:#5B6478;--line:#DCD3B8;--team1:#A6342A;--team2:#2E6F55;--team3:#2B4C7E;--team4:#8B5E22;}
-  body{margin:0; background:#DAD5C6; font-family:sans-serif; color:var(--ink);}
-  .toolbar{position:sticky; top:0; z-index:50; background:var(--navy-deep); color:var(--cream); padding:12px 20px; display:flex; gap:10px; align-items:center;}
+  :root{--navy:#16223F;--navy-deep:#0D1730;--gold:#C9A227;--gold-light:#E8CD7A;--cream:#F6F1E4;--card:#FFFDF6;--ink:#22314B;--team1:#A6342A;--team2:#2E6F55;--team3:#2B4C7E;--team4:#8B5E22;}
+  body{margin:0; background:#DAD5C6; font-family:sans-serif;}
+  
+  /* 대문 화면 스타일 */
+  #gate{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center;}
+  #gate h1{color:var(--navy); margin-bottom:10px;}
+  #gate p{color:var(--ink); margin-bottom:30px;}
+  .gate-buttons{display:grid; grid-template-columns:1fr 1fr; gap:15px; width:100%; max-width:400px;}
+  .gate-btn{padding:20px; border:none; border-radius:12px; color:#fff; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.1);}
+  .btn-admin{grid-column: span 2; background:var(--navy-deep); margin-top:20px;}
+
+  /* 기존 레이아웃 유지 */
+  #app{display:none;}
+  .toolbar{position:sticky; top:0; z-index:50; background:var(--navy-deep); color:var(--cream); padding:12px 20px; display:flex; align-items:center;}
   .admin-overview{max-width:980px; margin:20px auto; padding:0 15px;}
   .admin-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
-  .admin-card{background:var(--card); border-top:5px solid var(--team-color); border-radius:8px; padding:15px; font-size:14px;}
+  .admin-card{background:var(--card); border-top:5px solid var(--team-color); border-radius:8px; padding:15px;}
   .admin-photo-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:10px;}
   .admin-photo-grid img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:4px; background:#eee;}
   .sheet{width:100%; max-width:500px; margin:0 auto; background:var(--cream); display:none;}
   .sheet.show{display:block;}
-  .main-banner{width:100%; display:block;}
   .mission{display:flex; gap:10px; background:var(--card); border:1px solid var(--line); margin:10px; padding:10px; border-radius:8px; align-items:center;}
-  .mission.done{background:#FBF3E0; border-color:var(--gold);}
-  .stamp-slot{width:70px; height:70px; position:relative; border-radius:50%; border:1.5px dashed var(--line); overflow:hidden;}
+  .mission.done{background:#FBF3E0; border:2px solid var(--gold);}
+  .stamp-slot{width:70px; height:70px; position:relative; border-radius:50%; border:1.5px dashed #ccc; overflow:hidden; background:#fff;}
   .stamp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0;}
   .stamp-photo.show{opacity:0.5;}
-  .stamp-ink{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0;}
+  .stamp-ink{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;}
   .mission.done .stamp-ink{opacity:1; transform:rotate(-10deg);}
-  .finish{margin:10px; padding:15px; background:#9AA0AC; border-radius:8px; color:#fff;}
+  .finish{margin:10px; padding:15px; background:#9AA0AC; border-radius:8px; color:#fff; text-align:center;}
   .finish.unlocked{background:var(--navy);}
 </style>
 </head>
 <body>
 
-<div id="sheets"></div>
+<!-- 첫 접속 화면 (Gate) -->
+<div id="gate">
+  <img src="https://i.imgur.com/KxS6D6H.png" style="width:100%; max-width:300px; margin-bottom:20px;">
+  <h1>하나님 나라 여권</h1>
+  <p>본인의 조를 선택해 주세요</p>
+  <div class="gate-buttons">
+    <button class="gate-btn" style="background:var(--team1)" onclick="goTeam(1)">1조</button>
+    <button class="gate-btn" style="background:var(--team2)" onclick="goTeam(2)">2조</button>
+    <button class="gate-btn" style="background:var(--team3)" onclick="goTeam(3)">3조</button>
+    <button class="gate-btn" style="background:var(--team4)" onclick="goTeam(4)">4조</button>
+    <button class="gate-btn btn-admin" onclick="goTeam('admin')">관리자 모드</button>
+  </div>
+</div>
+
+<!-- 실제 앱 화면 -->
+<div id="app">
+  <div class="toolbar">
+    <b onclick="location.href='#'" style="cursor:pointer">← 처음으로</b>
+    <div style="flex:1; text-align:center;"><b id="toolbar-title">미션 여권</b></div>
+  </div>
+  <div id="sheets"></div>
+</div>
 
 <script type="module">
   import { initializeApp } from "firebase/app";
   import { getFirestore, doc, setDoc, onSnapshot } from "firebase/firestore";
 
-  // 기존 설정 유지
   const firebaseConfig = {
     apiKey: "AIzaSyAmacXwQ8mKABNZv-AR0i3iJzMToyNdUOQ",
     authDomain: "nongdari-73d22.firebaseapp.com",
@@ -59,49 +88,61 @@
   const teamNames = ['1조','2조','3조','4조'];
   const stations = [{name:'농다리'}, {name:'성황당'}, {name:'숲길'}, {name:'흔들다리'}, {name:'돌탑'}];
 
-  // 사진 압축 및 Base64 변환 함수
+  // 이미지 압축 함수
   async function compressImage(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = (event) => {
+      reader.onload = (e) => {
         const img = new Image();
-        img.src = event.target.result;
+        img.src = e.target.result;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 300; // 가로 300px로 압축 (용량 절약)
+          const MAX_WIDTH = 300;
           const scaleSize = MAX_WIDTH / img.width;
           canvas.width = MAX_WIDTH;
           canvas.height = img.height * scaleSize;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          resolve(canvas.toDataURL('image/jpeg', 0.6)); // 화질 60%로 압축
+          resolve(canvas.toDataURL('image/jpeg', 0.6));
         };
       };
     });
   }
 
-  window.handleUpload = async function(input, teamIdx, missionIdx) {
-    if(!input.files[0]) return;
-    const compressedBase64 = await compressImage(input.files[0]);
-    
-    // Firestore에 압축된 사진 데이터를 직접 저장 (Storage 사용 안 함)
-    await setDoc(doc(db, "teams", `team${teamIdx}`), {
-      [`m${missionIdx}`]: compressedBase64,
-      [`t${missionIdx}`]: new Date().getTime()
-    }, { merge: true });
+  // 전역 함수 선언
+  window.goTeam = (team) => {
+    location.hash = (team === 'admin') ? 'admin' : `team=${team}`;
+    location.reload();
   };
 
+  window.handleUpload = async function(input, teamIdx, missionIdx) {
+    if(!input.files[0]) return;
+    const btn = input.parentElement;
+    btn.style.opacity = "0.5"; // 업로드 중 표시
+    const base64 = await compressImage(input.files[0]);
+    await setDoc(doc(db, "teams", `team${teamIdx}`), {
+      [`m${missionIdx}`]: base64
+    }, { merge: true });
+    btn.style.opacity = "1";
+  };
+
+  // 라우팅 및 UI 생성
   const route = location.hash.replace('#','');
   const isAdmin = route === 'admin';
-  const selectedTeam = route.match(/team=([1-4])/) ? Number(route.match(/team=([1-4])/)[1])-1 : 0;
+  const teamMatch = route.match(/team=([1-4])/);
+  const selectedTeam = teamMatch ? Number(teamMatch[1])-1 : null;
 
-  function buildUI() {
+  if(isAdmin || selectedTeam !== null) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    
     let html = '';
     if(isAdmin) {
-      html += `<div class="admin-overview"><h2>관리자 대시보드 (실시간 사진)</h2><div class="admin-grid">`;
+      document.getElementById('toolbar-title').textContent = "전체 관리자 현황";
+      html += `<div class="admin-overview"><div class="admin-grid">`;
       for(let i=0; i<4; i++) {
-        html += `<div class="admin-card" style="--team-color:${teamColors[i]}"><b>${teamNames[i]}</b><div class="admin-photo-grid" id="admin-photos-${i}">
+        html += `<div class="admin-card" style="--team-color:${teamColors[i]}"><b>${teamNames[i]}</b><div class="admin-photo-grid">
           ${[0,1,2,3,4].map(m => `<img id="admin-img-${i}-${m}">`).join('')}
         </div><strong id="admin-count-${i}">0/5</strong></div>`;
       }
@@ -109,57 +150,52 @@
     }
 
     for(let i=0; i<4; i++) {
-      html += `<div class="sheet ${!isAdmin && i===selectedTeam ? 'show':''}" id="sheet-${i}">
-        <img class="main-banner" src="https://i.imgur.com/KxS6D6H.png">
+      html += `<div class="sheet ${i===selectedTeam ? 'show':''}" id="sheet-${i}">
         <div style="padding:15px;">
-          <h3>${teamNames[i]} 미션 여권</h3>
+          <h2 style="color:var(--navy); text-align:center;">${teamNames[i]} 여권</h2>
           ${stations.map((s, mIdx) => `
             <div class="mission" id="m-card-${i}-${mIdx}">
               <div class="stamp-slot">
-                <label>
+                <label style="display:block; width:100%; height:100%; cursor:pointer;">
                   <img class="stamp-photo" id="photo-${i}-${mIdx}">
-                  <div class="stamp-ink"><img src="https://i.imgur.com/8Q8W8r9.png" width="70"></div>
+                  <div id="guide-${i}-${mIdx}" style="text-align:center; font-size:10px; margin-top:25px; color:#999;">사진클릭</div>
+                  <div class="stamp-ink"><img src="https://i.imgur.com/8Q8W8r9.png" width="60"></div>
                   <input type="file" accept="image/*" style="display:none" onchange="handleUpload(this, ${i}, ${mIdx})">
                 </label>
               </div>
-              <div><b>${s.name}</b></div>
+              <div><b>${mIdx+1}. ${s.name}</b></div>
             </div>`).join('')}
-          <div class="finish" id="finish-${i}">5개 미션을 완료하세요</div>
+          <div class="finish" id="finish-${i}">미션을 진행해주세요</div>
         </div>
       </div>`;
     }
     document.getElementById('sheets').innerHTML = html;
-  }
 
-  buildUI();
-
-  // 실시간 데이터 감시
-  for(let i=0; i<4; i++) {
-    onSnapshot(doc(db, "teams", `team${i}`), (doc) => {
-      if(!doc.exists()) return;
-      const data = doc.data();
-      let count = 0;
-      for(let m=0; m<5; m++) {
-        if(data[`m${m}`]) {
-          count++;
-          const base64 = data[`m${m}`];
-          // 사용자 화면 업데이트
-          const img = document.getElementById(`photo-${i}-${m}`);
-          if(img) { img.src = base64; img.classList.add('show'); }
-          const card = document.getElementById(`m-card-${i}-${m}`);
-          if(card) card.classList.add('done');
-          // 관리자 화면 업데이트
-          const adminImg = document.getElementById(`admin-img-${i}-${m}`);
-          if(adminImg) adminImg.src = base64;
+    // 데이터 감시 리스너
+    for(let i=0; i<4; i++) {
+      onSnapshot(doc(db, "teams", `team${i}`), (doc) => {
+        if(!doc.exists()) return;
+        const data = doc.data();
+        let count = 0;
+        for(let m=0; m<5; m++) {
+          if(data[`m${m}`]) {
+            count++;
+            const base64 = data[`m${m}`];
+            const img = document.getElementById(`photo-${i}-${m}`);
+            if(img) { img.src = base64; img.classList.add('show'); document.getElementById(`guide-${i}-${m}`).style.display='none'; }
+            const card = document.getElementById(`m-card-${i}-${m}`);
+            if(card) card.classList.add('done');
+            const adminImg = document.getElementById(`admin-img-${i}-${m}`);
+            if(adminImg) adminImg.src = base64;
+          }
         }
-      }
-      const ct = document.getElementById(`admin-count-${i}`);
-      if(ct) ct.textContent = `${count}/5`;
-      if(count>=5) {
-        const fn = document.getElementById(`finish-${i}`);
-        if(fn) { fn.classList.add('unlocked'); fn.textContent = "★ 모든 미션 완료! 공연장으로 이동 ★"; }
-      }
-    });
+        if(isAdmin) document.getElementById(`admin-count-${i}`).textContent = `${count}/5`;
+        if(count>=5) {
+          const fn = document.getElementById(`finish-${i}`);
+          if(fn) { fn.classList.add('unlocked'); fn.textContent = "★ 미션 완료! 공연장으로! ★"; }
+        }
+      });
+    }
   }
 </script>
 </body>
