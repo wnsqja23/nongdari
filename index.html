@@ -4,57 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>하나님 나라 여권</title>
-<!-- Firebase SDK v8 (가장 안정적이고 에러가 적은 방식) -->
+<!-- Firebase SDK v8 (호환성이 가장 높음) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/* [원본 CSS 디자인 100% 그대로 복사] */
+/* 원본 디자인 유지 */
 @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap;}
 @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');font-weight:600;font-display:swap;}
 @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap;}
-:root{
-    --navy:#16223F;--navy-deep:#0D1730;--gold:#C9A227;--gold-light:#E8CD7A;--cream:#F6F1E4;--card:#FFFDF6;--ink:#22314B;--ink-soft:#5B6478;--line:#DCD3B8;
-    --team1:#A6342A;--team2:#2E6F55;--team3:#2B4C7E;--team4:#8B5E22;
-}
+:root{--navy:#16223F;--navy-deep:#0D1730;--gold:#C9A227;--gold-light:#E8CD7A;--cream:#F6F1E4;--card:#FFFDF6;--ink:#22314B;--ink-soft:#5B6478;--line:#DCD3B8;--team1:#A6342A;--team2:#2E6F55;--team3:#2B4C7E;--team4:#8B5E22;}
 *{box-sizing:border-box;} body{margin:0; background:#DAD5C6; font-family:'Noto Sans KR', sans-serif;}
-
-/* 첫 화면 Gate */
 #gate{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center;}
-.gate-logo{width:100%; max-width:300px; margin-bottom:20px;}
+.gate-logo{width:100%; max-width:320px; margin-bottom:25px;}
 .gate-buttons{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:400px;}
-.btn-admin-gate{grid-column: span 2; background:var(--navy-deep); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; margin-bottom:10px; font-family:'Paperlogy';}
-.gate-btn{padding:20px; border:none; border-radius:12px; color:#fff; font-size:18px; font-weight:bold; cursor:pointer; font-family:'Paperlogy';}
-
-/* 앱 화면 */
+.btn-admin-gate{grid-column: span 2; background:var(--navy-deep); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Paperlogy'; margin-bottom:10px;}
+.gate-btn{padding:20px; border:none; border-radius:12px; color:#fff; font-size:18px; font-weight:bold; cursor:pointer; font-family:'Paperlogy'; box-shadow:0 4px 6px rgba(0,0,0,0.1);}
 #app{display:none;}
 .toolbar{position:sticky; top:0; z-index:50; background:var(--navy-deep); color:var(--cream); padding:12px 20px; display:flex; align-items:center;}
-.admin-overview{max-width:980px; margin:20px auto; padding:0 15px;}
-.admin-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
-.admin-card{background:var(--card); border-top:5px solid var(--team-color); border-radius:8px; padding:15px;}
-.admin-photo-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:10px;}
-.admin-photo-grid img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:4px; background:#eee;}
-
-/* 여권 시트 디자인 */
-.sheet{width:100%; max-width:500px; margin:0 auto; background:var(--cream); display:none; padding-bottom:50px;}
+.toolbar b{font-family:'Paperlogy'; cursor:pointer;}
+.sheet{width:100%; max-width:500px; margin:0 auto; background:var(--cream); display:none; min-height:100vh; padding-bottom:50px;}
 .sheet.show{display:block;}
 .main-banner{width:100%; display:block;}
 .below-cover{background:var(--navy-deep); padding:8px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:6px solid var(--gold);}
 .cover-num{font-size:10px; color:var(--gold-light);}
 .team-chip{font-family:'Paperlogy'; padding:5px 16px; border-radius:4px; color:#fff; font-size:14px;}
-.mission{display:flex; gap:10px; background:var(--card); border:1px solid var(--line); margin:10px; padding:10px; border-radius:8px; align-items:center;}
+.mission{display:flex; gap:10px; background:var(--card); border:1px solid var(--line); margin:10px; padding:12px; border-radius:10px; align-items:center;}
 .mission.done{background:#FBF3E0; border:2px solid var(--gold);}
 .stamp-slot{width:80px; height:80px; position:relative; border-radius:50%; border:1.5px dashed #ccc; overflow:hidden; background:#fff; flex-shrink:0;}
-.stamp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .25s;}
+.stamp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0;}
 .stamp-photo.show{opacity:0.42;}
 .stamp-ink{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;}
 .mission.done .stamp-ink{opacity:1; transform:rotate(-8deg);}
-.m-body b{font-family:'Paperlogy'; color:var(--navy); font-size:14.5px;}
-.m-pose{font-family:'Gaegu'; font-weight:700; font-size:13px; color:var(--ink); margin-top:2px;}
-.finish{margin:10px; padding:20px; background:#9AA0AC; border-radius:8px; color:#fff; text-align:center;}
+.m-body b{font-family:'Paperlogy'; color:var(--navy); font-size:15px;}
+.m-pose{font-family:'Gaegu'; font-weight:700; font-size:13.5px; color:var(--ink); margin-top:3px;}
+.finish{margin:15px; padding:20px; background:#9AA0AC; border-radius:10px; color:#fff; text-align:center;}
 .finish.unlocked{background:var(--navy); border-left:6px solid var(--gold);}
+.admin-overview{max-width:980px; margin:20px auto; padding:0 15px;}
+.admin-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+.admin-card{background:var(--card); border-top:5px solid var(--team-color); border-radius:8px; padding:15px;}
+.admin-photo-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:10px;}
+.admin-photo-grid img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:4px; background:#eee;}
 </style>
 </head>
 <body>
@@ -62,24 +54,24 @@
 <div id="gate">
     <img src="assets/메인-배너.png" class="gate-logo" onerror="this.src='https://i.imgur.com/KxS6D6H.png'">
     <div class="gate-buttons">
-        <button class="btn-admin-gate" onclick="handleAdmin()">⚙️ 관리자 모드 접속</button>
-        <button class="gate-btn" style="background:var(--team1)" onclick="handleTeam(1)">1조</button>
-        <button class="gate-btn" style="background:var(--team2)" onclick="handleTeam(2)">2조</button>
-        <button class="gate-btn" style="background:var(--team3)" onclick="handleTeam(3)">3조</button>
-        <button class="gate-btn" style="background:var(--team4)" onclick="handleTeam(4)">4조</button>
+        <button class="btn-admin-gate" onclick="goAdmin()">⚙️ 관리자 모드 접속</button>
+        <button class="gate-btn" style="background:var(--team1)" onclick="goTeam(1)">1조</button>
+        <button class="gate-btn" style="background:var(--team2)" onclick="goTeam(2)">2조</button>
+        <button class="gate-btn" style="background:var(--team3)" onclick="goTeam(3)">3조</button>
+        <button class="gate-btn" style="background:var(--team4)" onclick="goTeam(4)">4조</button>
     </div>
 </div>
 
 <div id="app">
     <div class="toolbar">
-        <b onclick="location.href='#'" style="cursor:pointer; font-family:'Paperlogy'">← 처음으로</b>
+        <b onclick="location.href='#'">← 처음으로</b>
         <div style="flex:1; text-align:center; font-family:'Paperlogy'">하나님 나라 여권</div>
     </div>
     <div id="sheets"></div>
 </div>
 
 <script>
-// 1. 파이어베이스 설정 (본인 정보 유지)
+// 1. 파이어베이스 초기화 (가장 안전한 v8 방식)
 var firebaseConfig = {
     apiKey: "AIzaSyAmacXwQ8mKABNZv-AR0i3iJzMToyNdUOQ",
     authDomain: "nongdari-73d22.firebaseapp.com",
@@ -89,31 +81,31 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-// 2. 데이터 정의 (원본 내용)
+// 2. 데이터 세팅
 var teamColors = ['#A6342A','#2E6F55','#2B4C7E','#8B5E22'];
 var teamNames = ['1조','2조','3조','4조'];
 var stations = [
-    {name:'농다리', pose:'신발 속에 팀원들을 쏙! (원근법 트릭샷)'},
+    {name:'농다리', pose:'신발 속에 팀원들을 쏙! (원근법)'},
     {name:'용고개 성황당', pose:'가방 위에 팀원들이 올라탄 트릭샷'},
-    {name:'황토 맨발숲길', pose:'입 속으로 팀원들이 빨려 들어가는 포즈'},
+    {name:'황토 맨발숲길', pose:'입 속으로 빨려 들어가는 포즈'},
     {name:'흔들다리', pose:'바람에 날려가는 도미노 포즈'},
     {name:'닭 소원돌탑', pose:'누워서 손 모아 별 모양 만들기'}
 ];
 
-// 3. 조 이동 함수 (전역)
-function handleTeam(n) {
+// 3. 네비게이션 함수
+window.goTeam = function(n) {
     location.hash = "team=" + n;
     location.reload();
-}
-function handleAdmin() {
-    if(prompt("비밀번호를 입력하세요") === "3212") {
+};
+window.goAdmin = function() {
+    if(prompt("관리자 비밀번호를 입력하세요") === "3212") {
         location.hash = "admin";
         location.reload();
     }
-}
+};
 
-// 4. 사진 압축 및 업로드 (전역)
-async function handleUpload(input, tIdx, mIdx) {
+// 4. 업로드 로직
+window.triggerUpload = function(input, tIdx, mIdx) {
     if(!input.files[0]) return;
     var file = input.files[0];
     var reader = new FileReader();
@@ -131,74 +123,79 @@ async function handleUpload(input, tIdx, mIdx) {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             var base64 = canvas.toDataURL('image/jpeg', 0.6);
             
-            // 파이어베이스 저장
-            db.collection("teams").doc("team"+tIdx).set({
-                ['m'+mIdx]: base64
-            }, { merge: true });
+            db.collection("teams").doc("team" + tIdx).set({
+                ['m' + mIdx]: base64
+            }, { merge: true }).catch(function(err){ console.error(err); });
         };
     };
-}
+};
 
-// 5. 페이지 빌드
+// 5. 화면 렌더링
 var route = location.hash.replace('#','');
 var isAdmin = (route === 'admin');
 var tMatch = route.match(/team=([1-4])/);
-var currentTeam = tMatch ? Number(tMatch[1])-1 : null;
+var currentTeam = tMatch ? Number(tMatch[1]) - 1 : null;
 
-if(isAdmin || currentTeam !== null) {
+if (isAdmin || currentTeam !== null) {
     document.getElementById('gate').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     
-    var html = '';
-    if(isAdmin) {
-        html += '<div class="admin-overview"><div class="admin-grid">';
-        for(var i=0; i<4; i++) {
-            html += '<div class="admin-card" style="--team-color:'+teamColors[i]+'"><b>'+teamNames[i]+'</b><div class="admin-photo-grid" id="admin-grid-'+i+'">';
-            for(var m=0; m<5; m++) { html += '<img id="admin-img-'+i+'-'+m+'">'; }
-            html += '</div><strong id="admin-count-'+i+'">0/5</strong></div>';
+    var sheetsHtml = '';
+    
+    if (isAdmin) {
+        sheetsHtml += '<div class="admin-overview"><div class="admin-grid">';
+        for (var i = 0; i < 4; i++) {
+            sheetsHtml += '<div class="admin-card" style="--team-color:'+teamColors[i]+'"><b>'+teamNames[i]+'</b><div class="admin-photo-grid">';
+            for (var m = 0; m < 5; m++) { sheetsHtml += '<img id="admin-img-'+i+'-'+m+'">'; }
+            sheetsHtml += '</div><strong id="admin-count-'+i+'">0/5</strong></div>';
         }
-        html += '</div></div>';
+        sheetsHtml += '</div></div>';
     }
 
-    for(var i=0; i<4; i++) {
-        html += '<div class="sheet '+(i===currentTeam?'show':'')+'" id="sheet-'+i+'">';
-        html += '<img class="main-banner" src="assets/메인-배너.png" onerror="this.src=\'https://i.imgur.com/KxS6D6H.png\'">';
-        html += '<div class="below-cover"><div class="cover-num">PASSPORT GK-2026-000'+(i+1)+'</div><div class="team-chip" style="background:'+teamColors[i]+'">'+teamNames[i]+'</div></div>';
-        html += '<div style="padding:10px;">';
-        stations.forEach(function(s, mIdx){
-            html += '<div class="mission" id="m-card-'+i+'-'+mIdx+'">';
-            html += '<div class="stamp-slot"><label><img class="stamp-photo" id="photo-'+i+'-'+mIdx+'"><div style="text-align:center;font-size:9px;margin-top:30px;color:#999">사진클릭</div>';
-            html += '<div class="stamp-ink"><img src="https://i.imgur.com/8Q8W8r9.png" width="70"></div>';
-            html += '<input type="file" accept="image/*" style="display:none" onchange="handleUpload(this,'+i+','+mIdx+')"></label></div>';
-            html += '<div class="m-body"><b>'+(mIdx+1)+'. '+s.name+'</b><div class="m-pose">'+s.pose+'</div></div></div>';
+    for (var i = 0; i < 4; i++) {
+        sheetsHtml += '<div class="sheet '+(i===currentTeam?'show':'')+'" id="sheet-'+i+'">';
+        sheetsHtml += '<img class="main-banner" src="assets/메인-배너.png" onerror="this.src=\'https://i.imgur.com/KxS6D6H.png\'">';
+        sheetsHtml += '<div class="below-cover"><div class="cover-num">PASSPORT No. 2025-'+(i+1)+'</div><div class="team-chip" style="background:'+teamColors[i]+'">'+teamNames[i]+'</div></div>';
+        sheetsHtml += '<div style="padding:10px;">';
+        stations.forEach(function(s, mIdx) {
+            sheetsHtml += '<div class="mission" id="m-card-'+i+'-'+mIdx+'">';
+            sheetsHtml += '<div class="stamp-slot" onclick="this.querySelector(\'input\').click()">';
+            sheetsHtml += '<img class="stamp-photo" id="photo-'+i+'-'+mIdx+'">';
+            sheetsHtml += '<div id="guide-'+i+'-'+mIdx+'" style="text-align:center;font-size:10px;margin-top:30px;color:#999">사진클릭</div>';
+            sheetsHtml += '<div class="stamp-ink"><img src="https://i.imgur.com/8Q8W8r9.png" width="70"></div>';
+            sheetsHtml += '<input type="file" accept="image/*" style="display:none" onchange="triggerUpload(this,'+i+','+mIdx+')"></div>';
+            sheetsHtml += '<div class="m-body"><b>'+(mIdx+1)+'. '+s.name+'</b><div class="m-pose">'+s.pose+'</div></div></div>';
         });
-        html += '<div class="finish" id="finish-'+i+'">🔒 미션을 완료하면 안내가 열립니다</div></div></div>';
+        sheetsHtml += '<div class="finish" id="finish-'+i+'">🔒 미션을 완료하면 안내가 열립니다</div></div></div>';
     }
-    document.getElementById('sheets').innerHTML = html;
+    document.getElementById('sheets').innerHTML = sheetsHtml;
 
-    // 6. 실시간 리스너
-    for(var i=0; i<4; i++) {
+    // 6. 실시간 동기화
+    for (var i = 0; i < 4; i++) {
         (function(idx) {
-            db.collection("teams").doc("team"+idx).onSnapshot(function(doc) {
-                if(!doc.exists) return;
+            db.collection("teams").doc("team" + idx).onSnapshot(function(doc) {
+                if (!doc.exists) return;
                 var data = doc.data();
                 var count = 0;
-                for(var m=0; m<5; m++) {
-                    if(data['m'+m]) {
+                for (var m = 0; m < 5; m++) {
+                    if (data['m' + m]) {
                         count++;
-                        var base64 = data['m'+m];
-                        if(document.getElementById('photo-'+idx+'-'+m)) {
-                            document.getElementById('photo-'+idx+'-'+m).src = base64;
-                            document.getElementById('photo-'+idx+'-'+m).classList.add('show');
-                        }
-                        if(document.getElementById('m-card-'+idx+'-'+m)) document.getElementById('m-card-'+idx+'-'+m).classList.add('done');
-                        if(document.getElementById('admin-img-'+idx+'-'+m)) document.getElementById('admin-img-'+idx+'-'+m).src = base64;
+                        var base64 = data['m' + m];
+                        var pImg = document.getElementById('photo-' + idx + '-' + m);
+                        if (pImg) { pImg.src = base64; pImg.classList.add('show'); }
+                        var guid = document.getElementById('guide-' + idx + '-' + m);
+                        if (guid) guid.style.display = 'none';
+                        var card = document.getElementById('m-card-' + idx + '-' + m);
+                        if (card) card.classList.add('done');
+                        var aImg = document.getElementById('admin-img-' + idx + '-' + m);
+                        if (aImg) aImg.src = base64;
                     }
                 }
-                if(document.getElementById('admin-count-'+idx)) document.getElementById('admin-count-'+idx).textContent = count + "/5";
-                if(count >= 5) {
-                    var f = document.getElementById('finish-'+idx);
-                    if(f) { f.classList.add('unlocked'); f.innerHTML = "★ 모든 미션 완료! 공연장으로 모여주세요! ★"; }
+                var ctn = document.getElementById('admin-count-' + idx);
+                if (ctn) ctn.textContent = count + "/5";
+                if (count >= 5) {
+                    var f = document.getElementById('finish-' + idx);
+                    if (f) { f.classList.add('unlocked'); f.innerHTML = "🎉 모든 미션 완료! 공연장 무대로 오세요!"; }
                 }
             });
         })(i);
