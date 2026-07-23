@@ -12,55 +12,80 @@
     }
   }
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#16223F;--navy-deep:#0D1730;--gold:#C9A227;--gold-light:#E8CD7A;--cream:#F6F1E4;--card:#FFFDF6;--ink:#22314B;--team1:#A6342A;--team2:#2E6F55;--team3:#2B4C7E;--team4:#8B5E22;}
-  body{margin:0; background:#DAD5C6; font-family:sans-serif;}
-  
-  /* 첫 접속 화면 (Gate) 스타일 */
-  #gate{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center;}
-  .gate-logo{width:100%; max-width:280px; margin-bottom:20px;}
-  .gate-buttons{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:400px;}
-  
-  /* 관리자 버튼 - 조 선택 위에 배치 */
-  .btn-admin-gate{grid-column: span 2; background:var(--navy-deep); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; margin-bottom:15px; cursor:pointer; font-size:16px;}
-  .gate-btn{padding:20px; border:none; border-radius:12px; color:#fff; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.1);}
+  /* [기존 여권 디자인 CSS 복구] */
+  @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap;}
+  @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');font-weight:600;font-display:swap;}
+  @font-face{font-family:'Paperlogy';src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap;}
+  :root{
+    --navy:#16223F; --navy-deep:#0D1730; --gold:#C9A227; --gold-light:#E8CD7A; --cream:#F6F1E4; --card:#FFFDF6; --ink:#22314B; --ink-soft:#5B6478; --line:#DCD3B8;
+    --team1:#A6342A; --team2:#2E6F55; --team3:#2B4C7E; --team4:#8B5E22;
+  }
+  *{box-sizing:border-box;} body{margin:0; background:#DAD5C6; font-family:'Noto Sans KR', sans-serif; color:var(--ink);}
 
-  /* 실제 앱 레이아웃 */
+  /* Gate (첫 화면) */
+  #gate{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center;}
+  .gate-logo{width:100%; max-width:300px; margin-bottom:20px;}
+  .gate-buttons{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:400px;}
+  .btn-admin-gate{grid-column: span 2; background:var(--navy-deep); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; margin-bottom:10px; font-family:'Paperlogy';}
+  .gate-btn{padding:20px; border:none; border-radius:12px; color:#fff; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.1); font-family:'Paperlogy';}
+
+  /* App Layout */
   #app{display:none;}
-  .toolbar{position:sticky; top:0; z-index:50; background:var(--navy-deep); color:var(--cream); padding:10px 15px; display:flex; align-items:center; justify-content:space-between;}
-  .toolbar b{font-size:14px; cursor:pointer;}
-  
-  /* 관리자 대시보드 */
-  .admin-overview{max-width:980px; margin:15px auto; padding:0 10px;}
-  .admin-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
-  .admin-card{background:var(--card); border-top:5px solid var(--team-color); border-radius:8px; padding:12px;}
-  .admin-photo-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:3px; margin-top:10px;}
-  .admin-photo-grid img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:3px; background:#eee;}
-  
-  /* 사용자 여권 시트 */
-  .sheet{width:100%; max-width:500px; margin:0 auto; background:var(--cream); display:none; padding-bottom:40px;}
+  .toolbar{position:sticky; top:0; z-index:50; background:var(--navy-deep); color:var(--cream); padding:12px 20px; display:flex; align-items:center; font-size:14px;}
+  .toolbar b{font-family:'Paperlogy'; font-weight:600; cursor:pointer;}
+  .toolbar .spacer{flex:1;}
+
+  /* Admin Dashboard */
+  .admin-overview{max-width:980px; margin:28px auto; padding:0 18px;}
+  .admin-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .admin-card{background:var(--card); border:1px solid var(--line); border-top:6px solid var(--team-color); border-radius:8px; padding:18px;}
+  .admin-card b{display:block; font-family:'Paperlogy'; font-size:18px; color:var(--navy);}
+  .admin-photo-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:10px;}
+  .admin-photo-grid img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:4px; background:#eee;}
+  .admin-card strong{display:block; margin-top:10px; font-family:'Paperlogy'; font-size:24px; color:var(--team-color);}
+
+  /* Sheet & Mission */
+  .sheet{width:210mm; min-height:297mm; margin:24px auto; background:var(--cream); box-shadow:0 6px 24px rgba(0,0,0,0.25); display:none; overflow:hidden;}
   .sheet.show{display:block;}
-  .mission{display:flex; gap:10px; background:var(--card); border:1px solid var(--line); margin:10px; padding:12px; border-radius:10px; align-items:center;}
-  .mission.done{background:#FBF3E0; border:2px solid var(--gold);}
-  .stamp-slot{width:75px; height:75px; position:relative; border-radius:50%; border:1.5px dashed #ccc; overflow:hidden; background:#fff; flex-shrink:0;}
-  .stamp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0;}
-  .stamp-photo.show{opacity:0.5;}
+  .main-banner{display:block; width:100%; height:auto;}
+  .below-cover{background:var(--navy-deep); padding:8px 16mm; display:flex; justify-content:space-between; align-items:center; border-bottom:6px solid var(--gold);}
+  .team-chip{font-family:'Paperlogy'; font-weight:600; font-size:14px; padding:5px 16px; border-radius:4px; color:#fff;}
+  .body-pad{padding:14px 16mm 12mm;}
+  .bio-page{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 16px; margin-bottom:12px;}
+  .bio-grid{display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; font-size:11.5px;}
+  .fill-line{border-bottom:1px dashed var(--ink-soft); display:inline-block; min-width:80px;}
+  .mission{display:flex; gap:10px; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 14px; align-items:center; margin-bottom:8px;}
+  .mission.done{background:#FBF3E0; border-color:var(--gold);}
+  .stamp-slot{flex:none; width:82px; height:82px; position:relative;}
+  .stamp-slot label{display:block; width:100%; height:100%; border-radius:50%; cursor:pointer; overflow:hidden; background:#fff; border:1.5px dashed var(--line);}
+  .stamp-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .25s;}
+  .stamp-photo.show{opacity:0.42;}
   .stamp-ink{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;}
-  .mission.done .stamp-ink{opacity:1; transform:rotate(-10deg);}
-  .finish{margin:15px; padding:20px; background:#9AA0AC; border-radius:10px; color:#fff; text-align:center;}
-  .finish.unlocked{background:var(--navy);}
+  .mission.done .stamp-ink img{opacity:1; width:100%; transform:rotate(-8deg);}
+  .m-body b{font-family:'Paperlogy'; font-size:14.5px; color:var(--navy);}
+  .m-pose{font-family:'Gaegu'; font-weight:700; font-size:13px; margin-top:2px; color:var(--ink);}
+  .m-ref{width:88px; height:88px; object-fit:cover; border-radius:8px; border:1px solid var(--line); cursor:pointer;}
+  .finish{margin-top:10px; background:#9AA0AC; color:#fff; border-radius:8px; padding:14px 18px; display:flex; gap:14px; align-items:center;}
+  .finish.unlocked{background:var(--navy); border-left:6px solid var(--gold);}
+
+  @media screen and (max-width:600px){
+    .sheet{width:100%; min-height:0; margin:0; box-shadow:none;}
+    .body-pad{padding:12px 10px 20px;}
+    .admin-grid{grid-template-columns:repeat(2,1fr);}
+    .m-ref{display:none;}
+  }
 </style>
 </head>
 <body>
 
-<!-- 대문 화면 -->
 <div id="gate">
   <img src="https://i.imgur.com/KxS6D6H.png" class="gate-logo">
-  <h2 style="color:var(--navy-deep); margin-top:0;">하나님 나라 여권</h2>
   <div class="gate-buttons">
-    <!-- 관리자 버튼을 맨 위로 -->
-    <button class="btn-admin-gate" onclick="goAdmin()">⚙️ 관리자 모드 접속</button>
-    
+    <button class="btn-admin-gate" onclick="goAdmin()">⚙️ 관리자 모드 (3212)</button>
     <button class="gate-btn" style="background:var(--team1)" onclick="goTeam(1)">1조</button>
     <button class="gate-btn" style="background:var(--team2)" onclick="goTeam(2)">2조</button>
     <button class="gate-btn" style="background:var(--team3)" onclick="goTeam(3)">3조</button>
@@ -68,12 +93,11 @@
   </div>
 </div>
 
-<!-- 메인 앱 화면 -->
 <div id="app">
   <div class="toolbar">
-    <b onclick="location.href='#'">← 조 선택</b>
-    <div style="font-weight:bold;" id="toolbar-title">미션 현황</div>
-    <div style="width:50px;"></div> <!-- 밸런스용 -->
+    <b onclick="location.href='#'">← 처음으로</b>
+    <div class="spacer"></div>
+    <b id="toolbar-title">하나님 나라 여권</b>
   </div>
   <div id="sheets"></div>
 </div>
@@ -94,9 +118,14 @@
 
   const teamColors = ['#A6342A','#2E6F55','#2B4C7E','#8B5E22'];
   const teamNames = ['1조','2조','3조','4조'];
-  const stations = [{name:'농다리'}, {name:'성황당'}, {name:'숲길'}, {name:'흔들다리'}, {name:'돌탑'}];
+  const stations = [
+    {name:'농다리', sub:'천년의 돌다리', pose:'신발 속에 팀원들을 쏙! (원근법)', ref:'https://cdn.pixabay.com/photo/2016/11/19/11/33/foot-1838767_1280.jpg'},
+    {name:'용고개 성황당', sub:'전설의 서낭당', pose:'가방 위에 팀원들이 올라탄 트릭샷', ref:'https://cdn.pixabay.com/photo/2016/11/19/22/52/backpack-1841544_1280.jpg'},
+    {name:'황토 맨발숲길', sub:'맨발 걷기', pose:'입 속으로 빨려 들어가는 포즈', ref:'https://cdn.pixabay.com/photo/2017/04/05/01/16/food-2203732_1280.jpg'},
+    {name:'흔들다리', sub:'하늘다리', pose:'바람에 날려가는 도미노 포즈', ref:'https://cdn.pixabay.com/photo/2016/08/11/23/48/mountains-1587287_1280.jpg'},
+    {name:'닭 소원돌탑', sub:'소원 돌탑', pose:'누워서 손 모아 별 모양 만들기', ref:'https://cdn.pixabay.com/photo/2016/03/31/19/25/cross-1294975_1280.jpg'}
+  ];
 
-  // 이미지 압축
   async function compressImage(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -118,107 +147,11 @@
     });
   }
 
-  // 관리자 접속 비밀번호 확인
   window.goAdmin = () => {
-    const pw = prompt("관리자 비밀번호를 입력하세요.");
-    if(pw === "3212") {
-      location.hash = "admin";
-      location.reload();
-    } else if(pw !== null) {
-      alert("비밀번호가 틀렸습니다.");
-    }
+    if(prompt("관리자 비밀번호?") === "3212") { location.hash = "admin"; location.reload(); }
   };
+  window.goTeam = (t) => { location.hash = `team=${t}`; location.reload(); };
 
-  window.goTeam = (team) => {
-    location.hash = `team=${team}`;
-    location.reload();
-  };
-
-  window.handleUpload = async function(input, teamIdx, missionIdx) {
+  window.handleUpload = async function(input, tIdx, mIdx) {
     if(!input.files[0]) return;
-    const label = input.parentElement;
-    label.style.opacity = "0.4";
-    const base64 = await compressImage(input.files[0]);
-    await setDoc(doc(db, "teams", `team${teamIdx}`), {
-      [`m${missionIdx}`]: base64
-    }, { merge: true });
-    label.style.opacity = "1";
-  };
-
-  const route = location.hash.replace('#','');
-  const isAdmin = route === 'admin';
-  const teamMatch = route.match(/team=([1-4])/);
-  const selectedTeam = teamMatch ? Number(teamMatch[1])-1 : null;
-
-  if(isAdmin || selectedTeam !== null) {
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    
-    let html = '';
-    if(isAdmin) {
-      document.getElementById('toolbar-title').textContent = "실시간 관리자 대시보드";
-      html += `<div class="admin-overview"><div class="admin-grid">`;
-      for(let i=0; i<4; i++) {
-        html += `<div class="admin-card" style="--team-color:${teamColors[i]}">
-          <b>${teamNames[i]}</b>
-          <div class="admin-photo-grid">${[0,1,2,3,4].map(m => `<img id="admin-img-${i}-${m}">`).join('')}</div>
-          <strong id="admin-count-${i}" style="display:block; margin-top:8px; font-size:20px; color:var(--navy);">0/5</strong>
-        </div>`;
-      }
-      html += `</div></div>`;
-    }
-
-    for(let i=0; i<4; i++) {
-      html += `<div class="sheet ${i===selectedTeam ? 'show':''}" id="sheet-${i}">
-        <div style="padding:10px;">
-          <h2 style="text-align:center; color:var(--navy-deep);">${teamNames[i]} 미션 여권</h2>
-          ${stations.map((s, mIdx) => `
-            <div class="mission" id="m-card-${i}-${mIdx}">
-              <div class="stamp-slot">
-                <label>
-                  <img class="stamp-photo" id="photo-${i}-${mIdx}">
-                  <div id="guide-${i}-${mIdx}" style="text-align:center; font-size:10px; margin-top:28px; color:#bbb;">사진 클릭</div>
-                  <div class="stamp-ink"><img src="https://i.imgur.com/8Q8W8r9.png" width="60"></div>
-                  <input type="file" accept="image/*" style="display:none" onchange="handleUpload(this, ${i}, ${mIdx})">
-                </label>
-              </div>
-              <div style="flex:1;"><b>${mIdx+1}. ${s.name}</b></div>
-            </div>`).join('')}
-          <div class="finish" id="finish-${i}">미션을 진행 중입니다</div>
-        </div>
-      </div>`;
-    }
-    document.getElementById('sheets').innerHTML = html;
-
-    // 데이터 동기화
-    for(let i=0; i<4; i++) {
-      onSnapshot(doc(db, "teams", `team${i}`), (doc) => {
-        if(!doc.exists()) return;
-        const data = doc.data();
-        let count = 0;
-        for(let m=0; m<5; m++) {
-          if(data[`m${m}`]) {
-            count++;
-            const base64 = data[`m${m}`];
-            const img = document.getElementById(`photo-${i}-${m}`);
-            if(img) { img.src = base64; img.classList.add('show'); document.getElementById(`guide-${i}-${m}`).style.display='none'; }
-            const card = document.getElementById(`m-card-${i}-${m}`);
-            if(card) card.classList.add('done');
-            const adminImg = document.getElementById(`admin-img-${i}-${m}`);
-            if(adminImg) adminImg.src = base64;
-          }
-        }
-        if(isAdmin) document.getElementById(`admin-count-${i}`).textContent = `${count} / 5 완료`;
-        if(count>=5) {
-          const fn = document.getElementById(`finish-${i}`);
-          if(fn) { 
-            fn.classList.add('unlocked'); 
-            fn.innerHTML = "🎉 축하합니다! 모든 미션 완료! <br>공연장 무대로 모여주세요!"; 
-          }
-        }
-      });
-    }
-  }
-</script>
-</body>
-</html>
+    const label = input.parentElement; label.style.op
